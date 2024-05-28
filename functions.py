@@ -1,7 +1,8 @@
 from get_text import urls, scrape_noticias ,scrape_noticias_2
 import json
+import os
 
-def ministerio_mulheres():
+def ministerio_mulheres(file_path):
     print("MINISTÉRIO DAS MULHERES")
     todas_noticias = []
     
@@ -15,12 +16,17 @@ def ministerio_mulheres():
         else:
             break
         p+=1
+    
+    diretorio = os.path.dirname(file_path)
+    if not os.path.exists(diretorio):
+        os.makedirs(diretorio)
 
-    with open("json/Ministério das Mulheres.json", "w", encoding="utf-8") as json_file:
+    # Salvar as notícias no arquivo JSON
+    with open(file_path, "w", encoding="utf-8") as json_file:
         json.dump(todas_noticias, json_file, ensure_ascii=False, indent=4)
 
 
-def ministerio_saude():
+def ministerio_saude(file_path):
     print("MINISTÉRIO DA SAÚDE")
     todas_noticias = []
     
@@ -36,10 +42,15 @@ def ministerio_saude():
             break
         p+=1
 
-    with open("json/Ministério da Saúde.json", "w", encoding="utf-8") as json_file:
+    diretorio = os.path.dirname(file_path)
+    if not os.path.exists(diretorio):
+        os.makedirs(diretorio)
+
+    # Salvar as notícias no arquivo JSON
+    with open(file_path, "w", encoding="utf-8") as json_file:
         json.dump(todas_noticias, json_file, ensure_ascii=False, indent=4)
 
-def ministerio_direitos_humanos():
+def ministerio_direitos_humanos(file_path):
     print("MINISTÉRIO DOS DIREITOS HUMANOS")
     
     todas_noticias = []
@@ -56,5 +67,10 @@ def ministerio_direitos_humanos():
             break
         p+=1
 
-    with open("json/Ministério dos Direitos Humanos.json", "w", encoding="utf-8") as json_file:
+    diretorio = os.path.dirname(file_path)
+    if not os.path.exists(diretorio):
+        os.makedirs(diretorio)
+
+    # Salvar as notícias no arquivo JSON
+    with open(file_path, "w", encoding="utf-8") as json_file:
         json.dump(todas_noticias, json_file, ensure_ascii=False, indent=4)
