@@ -24,10 +24,10 @@ def generate_json(file_path):
 data_atual = datetime.now()
 data_formatada = data_atual.strftime("%d-%m-%Y")
 
-# ministerio_mulheres(f"json/{data_formatada}/Ministério das Mulheres.json")
-# ministerio_direitos_humanos(f"json/{data_formatada}/Ministério dos Direitos Humanos.json")
+ministerio_mulheres(f"json/{data_formatada}/Ministério das Mulheres.json")
+ministerio_direitos_humanos(f"json/{data_formatada}/Ministério dos Direitos Humanos.json")
 ministerio_saude(f"json/{data_formatada}/Ministério da Saúde.json")
 
-# generate_json(f"json/{data_formatada}/Ministério das Mulheres.json")
-# generate_json(f"json/{data_formatada}/Ministério dos Direitos Humanos.json")
-# generate_json(f"json/{data_formatada}/Ministério da Saúde.json")
+generate_json(f"json/{data_formatada}/Ministério das Mulheres.json")
+generate_json(f"json/{data_formatada}/Ministério dos Direitos Humanos.json")
+generate_json(f"json/{data_formatada}/Ministério da Saúde.json")
