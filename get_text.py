@@ -1,9 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+from datetime import datetime
+from functions import *
 
-
-def scrape_noticias(url):
+def scrape_noticias(url, file_path):
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -14,21 +15,28 @@ def scrape_noticias(url):
         if lista_noticias:
             noticias_list = []
 
-            for noticia in lista_noticias.find_all("li"):
+            for index, noticia in enumerate(lista_noticias.find_all("li")):
                 link_element = noticia.find("div", class_="conteudo").find("h2", class_="titulo").find("a")
                 
                 if link_element:
                     titulo = link_element.text.strip()
                     href = link_element.get("href")
+                    if (verify_json(file_path, href)):
+                        print(f"O {titulo} já existe no JSON")
+                        continue
                     data = noticia.find("span", "data").text.strip()
                     dia = data.split("/")[0]
                     mes = data.split("/")[1]
                     ano = data.split("/")[2]
+                    texto = extrair_texto(href)
+                    lastScrapping = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+                    
+                    print(index+1, len(lista_noticias.find_all("li")))
                     
                     if (int(ano) < 2019):
                         print("Ano é inferior a 2019")
                         return
-                    noticia_dict = {"title": titulo, "href": href, "data": data, "dia": dia, "mes": mes, "ano": ano }
+                    noticia_dict = {"title": titulo, "href": href, "texto": texto, "data": data, "dia": dia, "mes": mes, "ano": ano, "lastScrapping": lastScrapping }
                     
                     noticias_list.append(noticia_dict)
                 else:
@@ -41,7 +49,7 @@ def scrape_noticias(url):
     else:
         print("Erro ao acessar a página:", response.status_code)
 
-def scrape_noticias_2(url):
+def scrape_noticias_2(url, file_path):
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -51,20 +59,27 @@ def scrape_noticias_2(url):
         if lista_noticias:
             noticias_list = []
 
-            for noticia in lista_noticias:
+            for index, noticia in enumerate(lista_noticias):
                 link_element = noticia.find("a", "url")
                 if link_element:
                     titulo = link_element.text.strip()
                     href = link_element.get("href")
+                    if (verify_json(file_path, href)):
+                        print(f"O {titulo} já existe no JSON")
+                        continue
                     data = noticia.find("span", "summary-view-icon").text.strip()
                     dia = data.split("/")[0]
                     mes = data.split("/")[1]
                     ano = data.split("/")[2]
+                    texto = extrair_texto(href)
+                    lastScrapping = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+                    
+                    print(index+1, len(lista_noticias))
                     
                     if (int(ano) < 2019):
                         print("Ano é inferior a 2019")
                         return
-                    noticia_dict = {"title": titulo, "href": href, "data": data, "dia": dia, "mes": mes, "ano": ano }
+                    noticia_dict = {"title": titulo, "href": href, "texto": texto, "data": data, "dia": dia, "mes": mes, "ano": ano, "lastScrapping": lastScrapping }
                     
                     noticias_list.append(noticia_dict)
                 else:
@@ -77,7 +92,7 @@ def scrape_noticias_2(url):
     else:
         print("Erro ao acessar a página:", response.status_code)
 
-def extrair_texto_div(url):
+def extrair_texto(url):
     response = requests.get(url)
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, "html.parser")
@@ -100,5 +115,4 @@ urls = {
     "ministerio_saude": "https://www.gov.br/saude/pt-br/assuntos/noticias?b_start:int={}",
     "ministerio_direitos_humanos": "https://www.gov.br/mdh/pt-br/assuntos/noticias?b_start:int={}"
 }
-
 
