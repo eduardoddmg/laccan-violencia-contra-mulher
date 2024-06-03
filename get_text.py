@@ -29,6 +29,7 @@ def scrape_noticias(url, file_path):
                     mes = data.split("/")[1]
                     ano = data.split("/")[2]
                     texto = extrair_texto(href)
+                    tags = extrair_tags(href)
                     lastScrapping = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
                     
                     print(index+1, len(lista_noticias.find_all("li")))
@@ -36,7 +37,7 @@ def scrape_noticias(url, file_path):
                     if (int(ano) < 2019):
                         print("Ano é inferior a 2019")
                         return
-                    noticia_dict = {"title": titulo, "href": href, "texto": texto, "data": data, "dia": dia, "mes": mes, "ano": ano, "lastScrapping": lastScrapping }
+                    noticia_dict = {"title": titulo, "href": href, "texto": texto, "data": data, "dia": dia, "mes": mes, "ano": ano, "lastScrapping": lastScrapping, "tags": tags }
                     
                     noticias_list.append(noticia_dict)
                 else:
@@ -72,6 +73,7 @@ def scrape_noticias_2(url, file_path):
                     mes = data.split("/")[1]
                     ano = data.split("/")[2]
                     texto = extrair_texto(href)
+                    tags = extrair_tags(href)
                     lastScrapping = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
                     
                     print(index+1, len(lista_noticias))
@@ -79,7 +81,7 @@ def scrape_noticias_2(url, file_path):
                     if (int(ano) < 2019):
                         print("Ano é inferior a 2019")
                         return
-                    noticia_dict = {"title": titulo, "href": href, "texto": texto, "data": data, "dia": dia, "mes": mes, "ano": ano, "lastScrapping": lastScrapping }
+                    noticia_dict = {"title": titulo, "href": href, "texto": texto, "data": data, "dia": dia, "mes": mes, "ano": ano, "lastScrapping": lastScrapping, "tags": tags }
                     
                     noticias_list.append(noticia_dict)
                 else:
@@ -103,6 +105,22 @@ def extrair_texto(url):
             return texto_div
         else:
             print("Div com ID 'content-core' não encontrada.")
+            return None
+    else:
+        print("Erro ao acessar a página:", response.status_code)
+        return None
+    
+def extrair_tags(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, "html.parser")
+        tags = soup.find_all("a", "link-category")
+
+        if tags:
+            tags_text = [tag.get_text().strip() for tag in tags]
+            return tags_text
+        else:
+            print("TAG não encontrada.")
             return None
     else:
         print("Erro ao acessar a página:", response.status_code)
