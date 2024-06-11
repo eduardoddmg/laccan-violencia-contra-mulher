@@ -1,6 +1,9 @@
-from get_text import urls, scrape_noticias ,scrape_noticias_2
+"""Package imports"""
 import json
 import os
+
+"""Source imports"""
+from src.get_text import urls, scrape_noticias, scrape_noticias_2
 
 def ministerio_mulheres():
     print("MINISTÉRIO DAS MULHERES")
