@@ -1,16 +1,19 @@
 # Use a imagem base desejada
 FROM python:3.9-slim
 
+# Defina o diretório de trabalho
 WORKDIR /app
 
-# Copia os arquivos necessários para dentro do container
+# Copie os arquivos necessários para dentro do container
 COPY . /app
 
-# Instalação das dependências
+# Instalação das dependências Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Instalação do cron
-RUN apt-get update && apt-get -y install cron
+# Instalação do cron e ajustes necessários
+RUN apt-get update \
+    && apt-get -y install cron \
+    && rm -rf /var/lib/apt/lists/*
 
 # Adiciona o arquivo crontab com o job
 ADD cronjob /etc/cron.d/cronjob
